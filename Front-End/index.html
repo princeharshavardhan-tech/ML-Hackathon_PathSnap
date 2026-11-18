@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>PathSnap · Route Evaluation</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <div class="shell">
+    <aside class="sidebar">
+      <div class="brand"><span class="brand-icon">↗</span><div><strong>PathSnap</strong><small>Route reconstruction</small></div></div>
+      <div class="sidebar-body">
+        <div class="eyebrow">EVALUATION CONSOLE</div>
+        <h1>Trace the<br>road taken.</h1>
+        <p class="intro">Choose a trip to match its GPS observations against the road network.</p>
+
+        <div class="control-group server-group">
+          <label for="api-url">Laptop 1 API address</label>
+          <div class="server-input"><input id="api-url" type="url" inputmode="url" placeholder="http://192.168.1.10:8000" spellcheck="false"><button id="connect-button" type="button">Connect</button></div>
+          <p class="help">Enter Laptop 1's local network IP and port.</p>
+        </div>
+
+        <div class="control-group">
+          <label for="trip-select">Evaluation trip</label>
+          <select id="trip-select" disabled><option>Loading trips…</option></select>
+          <p class="help" id="trip-count">Connecting to the API…</p>
+        </div>
+        <button class="run-button" id="run-button" type="button" disabled><span>Run reconstruction</span><span aria-hidden="true">→</span></button>
+        <div class="status" id="status" role="status" aria-live="polite"><span class="status-dot"></span><span id="status-text">Connecting…</span></div>
+      </div>
+      <footer>Classifier → HMM / Viterbi<br><span id="model-name">Model loading…</span></footer>
+    </aside>
+
+    <main class="main">
+      <header class="topbar"><div><span class="eyebrow dark">TRIP ANALYSIS</span><h2 id="page-title">Route overview</h2></div><a id="api-docs" href="/docs" target="_blank" rel="noopener">API documentation ↗</a></header>
+      <section class="metrics" aria-label="Trip metrics">
+        <div class="metric"><span>GPS observations</span><strong id="metric-observations">—</strong><small>Points processed</small></div>
+        <div class="metric"><span>HMM accuracy</span><strong id="metric-hmm">—</strong><small>High-confidence reference</small></div>
+        <div class="metric"><span>Classifier accuracy</span><strong id="metric-classifier">—</strong><small>Before route smoothing</small></div>
+        <div class="metric"><span>Route continuity</span><strong id="metric-continuity">—</strong><small>Connected segments</small></div>
+      </section>
+      <section class="map-card" aria-label="Trip map">
+        <div class="map-header"><div><span class="eyebrow dark">FOLIUM MAP</span><h3 id="map-heading">Select a trip to begin</h3></div></div>
+        <div class="map-wrap" id="map-wrap"><iframe id="folium-map" title="Folium map of original GPS and predicted road segments" loading="lazy"></iframe><div class="map-empty" id="map-empty"><span class="empty-icon">⌁</span><strong>No route selected</strong><span>Choose a trip and run reconstruction to see its path.</span></div></div>
+        <div class="map-footer"><div class="legend"><span><i class="swatch blue"></i>GPS observations</span><span><i class="swatch coral"></i>Predicted road segments</span></div><span id="coverage">Pan, zoom, and toggle layers on the map</span></div>
+      </section>
+      <p class="note">Accuracy uses server-side reference labels for observations within 10 metres of the reference route. Reference arc IDs are never sent to this page.</p>
+    </main>
+  </div>
+</body>
+</html>
